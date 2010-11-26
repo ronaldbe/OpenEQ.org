@@ -10,13 +10,29 @@
 import web
 
 urls = (
-    "/.*", "hello"
-    )
+    "/comment/(.*)", "comment",
+    "/equation(.*)", "equation",
+    "/user/(.*)", "user",
+    "/(.*)", "index",
+)
+
 app = web.application(urls, globals())
 
-class hello: 
-    def GET(self):
-        return 'Hello, world!'
+class comment:
+    def GET(self, id):
+        return "comment: %s" %id
+
+class equation:
+    def GET(self, id):
+        return "equation: %s" %id
+
+class index: 
+    def GET(self, id):
+        return 'index: %s' %id
+
+class user:
+    def GET(self, id):
+        return "user: %s" %id
 
 #web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
 if __name__ == "__main__":
