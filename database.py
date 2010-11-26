@@ -27,10 +27,25 @@ class MySQLDatabase(baseobject.BaseObject):
 class SQLiteDatabase(baseobject.BaseObject):
     _classAttrs = { "_conn"        : None,
                     "path" : "./database.db", }
+    _datatypeMap = { "boolean" : "BOOL",
+                     "int"     : "INTEGER",
+                     "varchar" : "TEXT", }
     _type = "sqlite3"
 
-    def _createTable(this, name, columns):
-        print columns
+
+    def _buildCreateColumnSyntax(this, name = "", columns = {}):
+        rval = "%s %s" %( name, this._datatypeMap[ columns["type"] ] )
+        if columns["primary"].lower() == "true":
+            rval += " PRIMARY KEY"
+        return rval
+
+    def _createTable(this, name = "", columns = {}):
+        cmd = "CREATE TABLE %s (" %name
+        for column in columns.items():
+            cmd += this._buildCreateColumnSyntax(column[0], column[1])
+            cmd += ",\n"
+        cmd += ")"
+        print cmd
 
     def _connect(this):
         if this != None:

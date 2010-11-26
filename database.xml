@@ -4,12 +4,12 @@
         <table name="users">
             <columns>
                 <!-- this is the database structure -->
-                <column name="id" type="int" size="255" auto-increment="true" primary="true" unique="true" />
-                <column name="username" type="varchar" size="255" unique="true" />
-                <column name="password" type="varchar" size="255" unique="false" />
-                <column name="email" type="varchar" size="255" unique="true" />
-                <column name="cansubmit" type="boolean" />
-                <column name="canapprove" type="boolean" />
+                <column name="id" type="int" size="255" auto-increment="true" primary="true" unique="true" null="false" />
+                <column name="username" type="varchar" size="255" primary="false" unique="true" null="false" />
+                <column name="password" type="varchar" size="255" primary="false" unique="false" null="false" />
+                <column name="email" type="varchar" size="255" primary="false" unique="true" null="false" />
+                <column name="cansubmit" type="boolean" primary="false" unique="false" null="false" />
+                <column name="canapprove" type="boolean" primary="false" unique="false" null="false" />
             </columns>
         </table>
     </tables>
