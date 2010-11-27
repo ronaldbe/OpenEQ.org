@@ -1,6 +1,14 @@
-$def with (equations)
+$def with (title, equations)
+<html>
+<head>
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<title>$title</title>
+</head>
+<body>
 <ul>
 $for equation in equations:
-    <li id="$equation.id">$str(equation)</li>
+    <li id="$equation.id">$equation.toHtml()</li>
 </ul>
+</body>
+</html>
 

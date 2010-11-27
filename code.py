@@ -7,7 +7,10 @@
 # ron@openeq.org
 # -----------------------
 
+from sqlite3 import *
 import web
+
+from dbtypes import *
 
 urls = (
     "/comment/(.*)", "comment",
@@ -18,9 +21,13 @@ urls = (
 
 app = web.application(urls, globals())
 
+def initDb(dbURI = "sqlite:///home/ron/Code/Python/openeq/openeq.sqlite"):
+    sqlhub.processConnection = connectionForURI(dbURI)
+
 class comment:
     def GET(self, id):
-        return "comment: %s" %id
+        comment = Comment.get(id)
+        return comment
 
 class equation:
     def GET(self, id):
@@ -28,7 +35,9 @@ class equation:
 
 class index: 
     def GET(self, id):
-        return 'index: %s' %id
+        initDb()
+        renderer = web.template.render("templates/")
+        return renderer.equationList("OpenEQ.org :: Home", Equation.select())
 
 class user:
     def GET(self, id):
