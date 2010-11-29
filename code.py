@@ -13,33 +13,63 @@ import web
 from dbtypes import *
 
 urls = (
-    "/comment/(.*)", "comment",
-    "/equation(.*)", "equation",
-    "/user/(.*)", "user",
+    "/comment/view/(.*)", "ViewComment",
+    "/equation/add", "AddEquation",
+    "/equation/edit/(.*)/", "EditEquation",
+    "/equation/view/(.*)", "ViewEquation",
+    "/user/login", "LoginUser",
+    "/user/register", "RegisterUser",
+    "/user/view/(.*)", "ViewUser",
     "/(.*)", "index",
 )
 
 app = web.application(urls, globals())
+template = web.template.render("templates/")
 
 def initDb(dbURI = "sqlite:///home/ron/Code/Python/openeq/openeq.sqlite"):
     sqlhub.processConnection = connectionForURI(dbURI)
 
-class comment:
+class AddEquation:
+    def GET(self):
+        return "HELLO!!"
+
+    def POST(self):
+        pass
+
+class EditEquation:
+    def GET(self):
+        return "HELLO!!"
+
+    def POST(self):
+        pass
+
+class Index:
+    def GET(self, id):
+        initDb()
+        return template.equationList("Home", Equation.select())
+
+class LoginUser:
+    def GET(self):
+        pass
+
+class RegisterUser:
+    def GET(self):
+        return template.register("New User Registration")
+
+    def POST(self):
+        pass
+
+class ViewComment:
     def GET(self, id):
         comment = Comment.get(id)
         return comment
 
-class equation:
-    def GET(self, id):
-        return "equation: %s" %id
-
-class index: 
+class ViewEquation:
     def GET(self, id):
         initDb()
-        renderer = web.template.render("templates/")
-        return renderer.equationList("OpenEQ.org :: Home", Equation.select())
+        return template.equation( "OpenEQ.org :: ", Equation.get( int(id) ) )
 
-class user:
+class ViewUser:
     def GET(self, id):
         return "user: %s" %id
 

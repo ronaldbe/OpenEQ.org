@@ -25,15 +25,12 @@ class Equation(SQLObject):
     lastModifiedBy   = ForeignKey("User")
     lastModifiedDate = DateTimeCol()
 
-    def toHtml(this):
-        rval = "%s:: %s" %(this.body, this.description)
-        return rval
-
 class User(SQLObject):
     canApprove = BoolCol()
     canSubmit  = BoolCol()
     email      = StringCol()
     enabled    = BoolCol()
+    name       = StringCol()
     password   = StringCol()
     username   = StringCol()
 
