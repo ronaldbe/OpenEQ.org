@@ -11,12 +11,14 @@ from sqlite3 import *
 import web
 
 from dbtypes import *
+from forms import *
 
 urls = (
     "/comment/view/(.*)", "ViewComment",
     "/equation/add", "AddEquation",
     "/equation/edit/(.*)/", "EditEquation",
     "/equation/view/(.*)", "ViewEquation",
+    "/user/edit/(.*)", "EditUser",
     "/user/login", "LoginUser",
     "/user/register", "RegisterUser",
     "/user/view/(.*)", "ViewUser",
@@ -26,8 +28,13 @@ urls = (
 app = web.application(urls, globals())
 template = web.template.render("templates/")
 
-def initDb(dbURI = "sqlite:///home/ron/Code/Python/openeq/openeq.sqlite"):
-    sqlhub.processConnection = connectionForURI(dbURI)
+dbURI = "sqlite:///home/ron/Code/Python/openeq/openeq.sqlite"
+sqlhub.processConnection = connectionForURI(dbURI)
+
+class ViewComment:
+    def GET(self, id):
+        comment = Comment.get(id)
+        return comment
 
 class AddEquation:
     def GET(self):
@@ -43,10 +50,17 @@ class EditEquation:
     def POST(self):
         pass
 
+class ViewEquation:
+    def GET(self, id):
+        return template.ViewEquation( "OpenEQ.org :: ", Equation.get( int(id) ) )
+
 class Index:
     def GET(self, id):
-        initDb()
-        return template.equationList("Home", Equation.select())
+        return template.Index("Home", Equation.select())
+
+class EditUser:
+    def GET(self, email):
+        return template.EditUser("Edit User")
 
 class LoginUser:
     def GET(self):
@@ -54,20 +68,16 @@ class LoginUser:
 
 class RegisterUser:
     def GET(self):
-        return template.register("New User Registration")
+        return template.RegisterUser("New User Registration", regForm)
 
     def POST(self):
-        pass
-
-class ViewComment:
-    def GET(self, id):
-        comment = Comment.get(id)
-        return comment
-
-class ViewEquation:
-    def GET(self, id):
-        initDb()
-        return template.equation( "OpenEQ.org :: ", Equation.get( int(id) ) )
+        newUserInfo = regForm()
+        if not newUserInfo.validates():
+            return template.RegisterUser("New User Registration", newUserInfo)
+        newUser = User(**newUserInfo.d)
+        if newUser != None:
+            return template.blank("Registration successfull!! Please <a href=\"/user/login\">login</a>.")
+        return template.RegisterUser("New User Registration", newUserInfo)
 
 class ViewUser:
     def GET(self, id):

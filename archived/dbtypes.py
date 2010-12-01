@@ -26,11 +26,11 @@ class Equation(SQLObject):
     lastModifiedDate = DateTimeCol()
 
 class User(SQLObject):
-    canApprove = BoolCol()
-    canSubmit  = BoolCol()
-    email      = StringCol()
-    enabled    = BoolCol()
-    name       = StringCol()
-    password   = StringCol()
-    username   = StringCol()
+    canApprove   = BoolCol()
+    canSubmit    = BoolCol()
+    creationDate = DateTimeCol()
+    email        = StringCol()
+    enabled      = BoolCol()
+    name         = StringCol()
+    password     = StringCol()
 
